@@ -3,7 +3,7 @@ package keiser;
 public class Cypher {
     private String alphabet = "abcdefghijklmnopqrstuvwxyz";
     private String shiftedAlphabet = "";
-    private StringBuilder cypherString = new StringBuilder ();
+    private final StringBuilder cypherString = new StringBuilder ();
     private int key = 0;
     private String secret = "";
 
@@ -56,10 +56,22 @@ public class Cypher {
     public void setCypherString() {
         for (int i = 0; i < secret.length (); i++) {
             int tmp = 0;
-            char currentChar = secret.toLowerCase ().charAt (i);
+            String letter= String.valueOf (secret.charAt (i));
+            boolean isUppercase = !alphabet.contains (letter);
+            char currentChar = isUppercase ?
+                    secret.toLowerCase ().charAt (i) : secret.toUpperCase ().charAt (i) ;
+
+
             if (currentChar != ' ') {
-                tmp = alphabet.indexOf (currentChar);
-                char newChar = shiftedAlphabet.charAt (tmp);
+
+                tmp = isUppercase ?
+                        alphabet.indexOf (currentChar) :
+                        alphabet.toUpperCase ().indexOf (currentChar);
+
+                char newChar = isUppercase ?
+                        shiftedAlphabet.toUpperCase ().charAt (tmp):
+                        shiftedAlphabet.charAt (tmp);
+
                 cypherString.append (newChar);
             } else {
                 cypherString.append (" ");

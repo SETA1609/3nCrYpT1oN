@@ -3,7 +3,7 @@ package keiser;
 public class Solution {
 
     public static void main(String[] args) {
-        Cypher caesar= new Cypher (12,"Hakuna Matata");
+        Cypher caesar= new Cypher (19,"Hakuna Matata");
 
 
 
