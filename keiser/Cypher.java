@@ -1,20 +1,29 @@
 package keiser;
 
+import java.io.File;
+
+import edu.duke.FileResource;
+
 public class Cypher {
     private String alphabet = "abcdefghijklmnopqrstuvwxyz";
     private String shiftedAlphabet = "";
-    private final StringBuilder cypherString = new StringBuilder ();
+    private final StringBuilder cypherString = new StringBuilder();
     private int key = 0;
     private String secret = "";
 
     public Cypher() {
     }
 
+    public Cypher(int key) {
+        setKey(key);
+        setShiftedAlphabet();
+    }
+
     public Cypher(int key, String secret) {
-        setKey (key);
-        setSecret (secret);
-        setShiftedAlphabet ();
-        setCypherString ();
+        setKey(key);
+        setSecret(secret);
+        setShiftedAlphabet();
+        setCypherString();
     }
 
     public String getAlphabet() {
@@ -30,7 +39,7 @@ public class Cypher {
     }
 
     public void setShiftedAlphabet() {
-        this.shiftedAlphabet = alphabet.substring (this.key) + alphabet.substring (0, this.key);
+        this.shiftedAlphabet = alphabet.substring(this.key) + alphabet.substring(0, this.key);
     }
 
     public int getKey() {
@@ -54,28 +63,34 @@ public class Cypher {
     }
 
     public void setCypherString() {
-        for (int i = 0; i < secret.length (); i++) {
+        for (int i = 0; i < secret.length(); i++) {
             int tmp = 0;
-            String letter= String.valueOf (secret.charAt (i));
-            boolean isUppercase = !alphabet.contains (letter);
-            char currentChar = isUppercase ?
-                    secret.toLowerCase ().charAt (i) : secret.toUpperCase ().charAt (i) ;
+            String letter = String.valueOf(secret.charAt(i));
+            boolean isUppercase = !alphabet.contains(letter);
+            boolean isCharLetter = alphabet.contains(letter) || alphabet.toUpperCase().contains(letter);
+            char currentChar = isUppercase ? secret.toLowerCase().charAt(i) : secret.toUpperCase().charAt(i);
 
+            if (isCharLetter) {
 
-            if (currentChar != ' ') {
+                tmp = isUppercase ? alphabet.indexOf(currentChar) : alphabet.toUpperCase().indexOf(currentChar);
 
-                tmp = isUppercase ?
-                        alphabet.indexOf (currentChar) :
-                        alphabet.toUpperCase ().indexOf (currentChar);
+                char newChar = isUppercase ? shiftedAlphabet.toUpperCase().charAt(tmp) : shiftedAlphabet.charAt(tmp);
 
-                char newChar = isUppercase ?
-                        shiftedAlphabet.toUpperCase ().charAt (tmp):
-                        shiftedAlphabet.charAt (tmp);
-
-                cypherString.append (newChar);
+                cypherString.append(newChar);
             } else {
-                cypherString.append (" ");
+                cypherString.append(currentChar);
             }
         }
+    }
+
+    public void testCypher() {
+        if (!cypherString.equals("")) {
+            cypherString.delete(0, cypherString.length());
+        }
+        FileResource fr = new FileResource();
+        setSecret(fr.asString());
+        setCypherString();
+        System.out.println("Message to encode: " + secret);
+        System.out.println("Encoded message is: " + cypherString);
     }
 }

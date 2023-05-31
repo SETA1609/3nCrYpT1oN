@@ -11,5 +11,6 @@ public class Solution {
         System.out.println (caesar.getShiftedAlphabet ());
         System.out.println (caesar.getSecret ());
         System.out.println (caesar.getCypherString ());
+        caesar.testCypher();
     }
 }
