@@ -9,8 +9,8 @@ public class Solution {
         System.out.println(caesar.getShiftedAlphabet());
         System.out.println(caesar.getSecret());
         System.out.println(caesar.getCypherString());
-        // caesar.setKey1(23);
-        // caesar.testCypher();
-        caesar.test2KeyEncryption(23, 17);
+         caesar.setKey1(23);
+         caesar.testCypher();
+       // caesar.test2KeyEncryption(23, 17);
     }
 }
