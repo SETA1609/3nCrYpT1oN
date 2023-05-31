@@ -64,7 +64,7 @@ public class Cypher {
 
     public void setCypherString() {
         for (int i = 0; i < secret.length(); i++) {
-            int tmp = 0;
+            int alphabetIndex = 0;
             String letter = String.valueOf(secret.charAt(i));
             boolean isUppercase = !alphabet.contains(letter);
             boolean isCharLetter = alphabet.contains(letter) || alphabet.toUpperCase().contains(letter);
@@ -72,9 +72,11 @@ public class Cypher {
 
             if (isCharLetter) {
 
-                tmp = isUppercase ? alphabet.indexOf(currentChar) : alphabet.toUpperCase().indexOf(currentChar);
+                alphabetIndex = isUppercase ? alphabet.indexOf(currentChar)
+                        : alphabet.toUpperCase().indexOf(currentChar);
 
-                char newChar = isUppercase ? shiftedAlphabet.toUpperCase().charAt(tmp) : shiftedAlphabet.charAt(tmp);
+                char newChar = isUppercase ? shiftedAlphabet.toUpperCase().charAt(alphabetIndex)
+                        : shiftedAlphabet.charAt(alphabetIndex);
 
                 cypherString.append(newChar);
             } else {
@@ -87,9 +89,12 @@ public class Cypher {
         if (!cypherString.equals("")) {
             cypherString.delete(0, cypherString.length());
         }
+        setShiftedAlphabet();
         FileResource fr = new FileResource();
         setSecret(fr.asString());
         setCypherString();
+        System.out.println(alphabet);
+        System.out.println(shiftedAlphabet);
         System.out.println("Message to encode: " + secret);
         System.out.println("Encoded message is: " + cypherString);
     }
