@@ -7,11 +7,11 @@ import edu.duke.FileResource;
 public class Cypher {
     private String alphabet = "abcdefghijklmnopqrstuvwxyz";
     private String shiftedAlphabet = "";
+    private String shifted2 = "";
     private final StringBuilder cypherString = new StringBuilder();
     private int key1 = 0;
     private int key2 = 0;
     private String secret = "";
-    private String shifted2 = "";
 
     public Cypher() {
     }
@@ -94,7 +94,6 @@ public class Cypher {
             boolean isUppercase = !alphabet.contains(letter);
             boolean isCharLetter = alphabet.contains(letter) || alphabet.toUpperCase().contains(letter);
             char currentChar = isUppercase ? secret.toLowerCase().charAt(i) : secret.toUpperCase().charAt(i);
-
             if (isCharLetter) {
 
                 alphabetIndex = isUppercase ? alphabet.indexOf(currentChar)
@@ -151,7 +150,6 @@ public class Cypher {
                     newChar = isUppercase ? shifted2.toUpperCase().charAt(alphabetIndex)
                             : shifted2.charAt(alphabetIndex);
                 }
-
                 cypherString.append(newChar);
             } else {
                 cypherString.append(currentChar);
@@ -168,5 +166,35 @@ public class Cypher {
         System.out.println(shifted2);
         System.out.println("Message to encode: " + secret);
         System.out.println("Encoded message is: " + cypherString);
+    }
+
+    public int biggestIndex(int[] counters) {
+        int index = 0;
+        int currentIndex = 0;
+        for (int i : counters) {
+            currentIndex = i;
+            if (currentIndex > index) {
+                index=currentIndex;
+            }
+        }
+        return index;
+    }
+
+    public int mostEsIndex(String input) {
+        int[] letterCounters = new int[26];
+        for (int i = 0; i < letterCounters.length; i++) {
+            for (char letter : input.toCharArray()) {
+                if (letter == alphabet.charAt(i)) {
+                    letterCounters[i] += 1;
+                }
+            }
+        }
+        int index = biggestIndex(letterCounters);
+        System.out.println(alphabet.charAt(index));
+        return index;
+    }
+
+    public void decrypt() {
+
     }
 }
