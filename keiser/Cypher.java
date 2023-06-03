@@ -168,13 +168,24 @@ public class Cypher {
         System.out.println("Encoded message is: " + cypherString);
     }
 
+    public String[] getCommon() {
+        FileResource fr = new FileResource(".//Resources//decrypt//common.txt");
+        String[] common = new String[20];
+        int index = 0;
+        for (String s : fr.words()) {
+            common[index] = s;
+            index++;
+        }
+        return common;
+    }
+
     public int biggestIndex(int[] counters) {
         int index = 0;
         int currentIndex = 0;
         for (int i : counters) {
             currentIndex = i;
             if (currentIndex > index) {
-                index=currentIndex;
+                index = currentIndex;
             }
         }
         return index;
@@ -192,6 +203,25 @@ public class Cypher {
         int index = biggestIndex(letterCounters);
         System.out.println(alphabet.charAt(index));
         return index;
+    }
+
+    public void bruteForceDecrypt(String encrypted) {
+
+        for (int i = 0; i < 26; i++) {
+            Cypher c = new Cypher(i, encrypted);
+            String s = c.cypherString.toString();
+            System.out.println(i + " is the key for: " + s);
+        }
+    }
+
+    public String[] allDecodedStrings(String encrypted) {
+        String[] decodedStrings = new String[26];
+        for (int i = 0; i < 26; i++) {
+            Cypher c = new Cypher(i, encrypted);
+            String s = c.cypherString.toString();
+            decodedStrings[i] = s;
+        }
+        return decodedStrings;
     }
 
     public void decrypt() {
