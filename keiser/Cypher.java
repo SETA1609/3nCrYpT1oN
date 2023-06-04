@@ -224,7 +224,18 @@ public class Cypher {
         return decodedStrings;
     }
 
+    public int indexWithMostCommonWords(String[] afterDecrypt) {
+        int index = 0;
+        String[] commons = getCommon();
+
+        return index;
+    }
+
     public void decrypt() {
+
+    }
+
+    public void decrypt2Keys() {
 
     }
 }
