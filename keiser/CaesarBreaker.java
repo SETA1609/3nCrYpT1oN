@@ -30,16 +30,31 @@ public class CaesarBreaker {
         return index;
     }
 
-    public int decrypt(String toDecrypt) {
+    public int getKey(String toDecrypt) {
         int decryptKey = maxIndex(countLetters(toDecrypt));
         return decryptKey;
     }
 
     public void testDecrypt() {
         FileResource fr = new FileResource();
-        Cypher c = new Cypher(11, fr.asString());
-        System.out.println(c.getSecret());
+        int decryptKey = getKey(fr.asString());
+        System.out.println("the key to decrypt the message is : " + decryptKey);
+        Cypher c = new Cypher(decryptKey, fr.asString());
         System.out.println(c.getCypherString());
-        System.out.println("the key to decrypt the message is : " + decrypt(c.getCypherString().toString()));
+    }
+
+    public String halfOfString(String input, int startIndex) {
+        StringBuilder sb = new StringBuilder();
+        String newInput = input.substring(startIndex);
+        for (int i = 0; i < newInput.length(); i++) {
+            if (i % 2 == 0) {
+                sb.append(newInput.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+
+    public void decryptTwoKeys() {
+
     }
 }
