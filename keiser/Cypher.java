@@ -127,6 +127,7 @@ public class Cypher {
     }
 
     public void encryptTwoKeys(String input, int key1, int key2) {
+        setSecret(input);
         setKey1(key1);
         setKey2(key2);
         setShiftedAlphabet();
@@ -191,20 +192,6 @@ public class Cypher {
         return index;
     }
 
-    public int mostEsIndex(String input) {
-        int[] letterCounters = new int[26];
-        for (int i = 0; i < letterCounters.length; i++) {
-            for (char letter : input.toCharArray()) {
-                if (letter == alphabet.charAt(i)) {
-                    letterCounters[i] += 1;
-                }
-            }
-        }
-        int index = biggestIndex(letterCounters);
-        System.out.println(alphabet.charAt(index));
-        return index;
-    }
-
     public void bruteForceDecrypt(String encrypted) {
 
         for (int i = 0; i < 26; i++) {
@@ -224,18 +211,4 @@ public class Cypher {
         return decodedStrings;
     }
 
-    public int indexWithMostCommonWords(String[] afterDecrypt) {
-        int index = 0;
-        String[] commons = getCommon();
-
-        return index;
-    }
-
-    public void decrypt() {
-
-    }
-
-    public void decrypt2Keys() {
-
-    }
 }

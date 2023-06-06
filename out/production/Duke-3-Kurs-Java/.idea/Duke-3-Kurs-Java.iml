@@ -7,5 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="apache-csv" level="project" />
+    <orderEntry type="library" name="courserajava" level="project" />
   </component>
 </module>

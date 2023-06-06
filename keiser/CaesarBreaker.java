@@ -30,14 +30,14 @@ public class CaesarBreaker {
         return index;
     }
 
-    public int getKey(String toDecrypt) {
+    public int decrypt1Key(String toDecrypt) {
         int decryptKey = maxIndex(countLetters(toDecrypt));
         return decryptKey;
     }
 
     public void testDecrypt() {
         FileResource fr = new FileResource();
-        int decryptKey = getKey(fr.asString());
+        int decryptKey = decrypt1Key(fr.asString());
         System.out.println("the key to decrypt the message is : " + decryptKey);
         Cypher c = new Cypher(decryptKey, fr.asString());
         System.out.println(c.getCypherString());
@@ -45,16 +45,24 @@ public class CaesarBreaker {
 
     public String halfOfString(String input, int startIndex) {
         StringBuilder sb = new StringBuilder();
-        String newInput = input.substring(startIndex);
-        for (int i = 0; i < newInput.length(); i++) {
-            if (i % 2 == 0) {
-                sb.append(newInput.charAt(i));
-            }
+        for (int i = startIndex; i < input.length(); i += 2) {
+            sb.append(input.charAt(i));
         }
         return sb.toString();
     }
 
-    public void decryptTwoKeys() {
 
+    public void decryptTwoKeys(String input) {
+        String firstHalf = halfOfString(input, 0);
+        String secondHalf = halfOfString(input, 1);
+        int firstKey = decrypt1Key(firstHalf);
+        int secondKey = decrypt1Key(secondHalf);
+        Cypher c = new Cypher();
+        c.encryptTwoKeys(input, (26-firstKey), (26-secondKey));
+
+        System.out.println("First key: " + firstKey);
+        System.out.println("Second key: " + secondKey);
+        System.out.println(c.getCypherString().toString());
     }
+
 }
