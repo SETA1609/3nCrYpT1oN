@@ -3,8 +3,8 @@ package keiser;
 import java.util.HashMap;
 
 public class Cypher {
-    int key1;
-    int key2;
+    int key1=0;
+    int key2=0;
     HashMap<Integer,Character> alpha;
     HashMap<Character,Character> encrypt1;
     HashMap<Character,Character> encrypt2;
@@ -147,6 +147,16 @@ public class Cypher {
     }
 
     public void setOutput() {
-        this.output = output;
+        if (key1!=0&&key2==0){
+            for (char c:input.toCharArray()) {
+                boolean isLetter= Character.isLetter(c);
+                if (isLetter){
+                    boolean isUppercase = !alpha.containsValue(c);
+                    char newChar= isUppercase? (char)(encrypt1.get(c)-90):encrypt1.get(c);
+                    output = input.replace(c,newChar);
+                }
+
+            }
+        }
     }
 }
