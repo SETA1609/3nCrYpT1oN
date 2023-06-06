@@ -1,214 +1,152 @@
 package keiser;
 
-import java.io.File;
-
-import edu.duke.FileResource;
+import java.util.HashMap;
 
 public class Cypher {
-    private String alphabet = "abcdefghijklmnopqrstuvwxyz";
-    private String shiftedAlphabet = "";
-    private String shifted2 = "";
-    private final StringBuilder cypherString = new StringBuilder();
-    private int key1 = 0;
-    private int key2 = 0;
-    private String secret = "";
-
-    public Cypher() {
-    }
-
-    public Cypher(int key) {
-        setKey1(key);
-        setShiftedAlphabet();
-    }
-
-    public Cypher(int key, String secret) {
-        setKey1(key);
-        setSecret(secret);
-        setShiftedAlphabet();
-        setCypherString();
-    }
-
-    public String getAlphabet() {
-        return alphabet;
-    }
-
-    public void setAlphabet(String alphabet) {
-        this.alphabet = alphabet;
-    }
-
-    public String getShiftedAlphabet() {
-        return shiftedAlphabet;
-    }
-
-    public void setShiftedAlphabet() {
-        this.shiftedAlphabet = alphabet.substring(this.key1) + alphabet.substring(0, this.key1);
-    }
-
-    public String getShifted2() {
-        return shifted2;
-    }
-
-    public void setShifted2() {
-        this.shifted2 = alphabet.substring(this.key2) + alphabet.substring(0, this.key2);
-    }
+    int key1;
+    int key2;
+    HashMap<Integer,Character> alpha;
+    HashMap<Character,Character> encrypt1;
+    HashMap<Character,Character> encrypt2;
+    HashMap<Character,Character> decrypt1;
+    HashMap<Character,Character> decrypt2;
+    String input;
+    String output;
 
     public int getKey1() {
         return key1;
     }
 
-    public void setKey1(int key) {
-        this.key1 = key;
+    public void setKey1(int key1) {
+        this.key1 = key1;
     }
 
     public int getKey2() {
         return key2;
     }
 
-    public void setKey2(int key) {
-        this.key2 = key;
+    public void setKey2(int key2) {
+        this.key2 = key2;
     }
 
-    public String getSecret() {
-        return secret;
+    public HashMap<Integer, Character> getAlpha() {
+        return alpha;
     }
 
-    public void setSecret(String secret) {
-        this.secret = secret;
+    public void setAlpha() {
+        alpha= new HashMap<>();
+        int i =1;
+        for (char a='a'; a <='z' ; a++) {
+            alpha.put(i,a);
+            i++;
+        }
     }
 
-    public StringBuilder getCypherString() {
-        return cypherString;
+    public HashMap<Character, Character> getEncrypt1() {
+        return encrypt1;
     }
 
-    public void setCypherString() {
-        encrypt(secret, key1);
-    }
-
-    public void encrypt(String input, int key) {
-        resetCypherString();
-        setKey1(key);
-        setSecret(input);
-        for (int i = 0; i < secret.length(); i++) {
-            int alphabetIndex = 0;
-            String letter = String.valueOf(secret.charAt(i));
-            boolean isUppercase = !alphabet.contains(letter);
-            boolean isCharLetter = alphabet.contains(letter) || alphabet.toUpperCase().contains(letter);
-            char currentChar = isUppercase ? secret.toLowerCase().charAt(i) : secret.toUpperCase().charAt(i);
-            if (isCharLetter) {
-
-                alphabetIndex = isUppercase ? alphabet.indexOf(currentChar)
-                        : alphabet.toUpperCase().indexOf(currentChar);
-
-                char newChar = isUppercase ? shiftedAlphabet.toUpperCase().charAt(alphabetIndex)
-                        : shiftedAlphabet.charAt(alphabetIndex);
-
-                cypherString.append(newChar);
-            } else {
-                cypherString.append(currentChar);
+    public void setEncrypt1() {
+        encrypt1=new HashMap<>();
+        int offset = key1;
+        int i=1;
+        for (char a='a'; a <='z' ; a++) {
+            char currentChar= (char) (a+offset);
+            if (currentChar<122){
+                encrypt1.put(a,currentChar);
             }
-        }
-    }
 
-    public void resetCypherString() {
-        if (!cypherString.equals("")) {
-            cypherString.delete(0, cypherString.length());
-        }
-    }
-
-    public void testCypher() {
-        setShiftedAlphabet();
-        FileResource fr = new FileResource();
-        setSecret(fr.asString());
-        setCypherString();
-        System.out.println(alphabet);
-        System.out.println(shiftedAlphabet);
-        System.out.println("Message to encode: " + secret);
-        System.out.println("Encoded message is: " + cypherString);
-    }
-
-    public void encryptTwoKeys(String input, int key1, int key2) {
-        setSecret(input);
-        setKey1(key1);
-        setKey2(key2);
-        setShiftedAlphabet();
-        setShifted2();
-        resetCypherString();
-        for (int i = 0; i < secret.length(); i++) {
-            int alphabetIndex = 0;
-            String letter = String.valueOf(secret.charAt(i));
-            boolean isUppercase = !alphabet.contains(letter);
-            boolean isCharLetter = alphabet.contains(letter) || alphabet.toUpperCase().contains(letter);
-            char currentChar = isUppercase ? secret.toLowerCase().charAt(i) : secret.toUpperCase().charAt(i);
-
-            if (isCharLetter) {
-                char newChar = ' ';
-                alphabetIndex = isUppercase ? alphabet.indexOf(currentChar)
-                        : alphabet.toUpperCase().indexOf(currentChar);
-                if (i % 2 == 0) {
-                    newChar = isUppercase ? shiftedAlphabet.toUpperCase().charAt(alphabetIndex)
-                            : shiftedAlphabet.charAt(alphabetIndex);
-                } else {
-                    newChar = isUppercase ? shifted2.toUpperCase().charAt(alphabetIndex)
-                            : shifted2.charAt(alphabetIndex);
-                }
-                cypherString.append(newChar);
-            } else {
-                cypherString.append(currentChar);
+            if (currentChar>122){
+                currentChar= (char)(currentChar-122+97);
+                encrypt1.put(a,currentChar);
             }
+
+            i++;
         }
     }
 
-    public void test2KeyEncryption(int key1, int key2) {
-        FileResource fr = new FileResource();
-        setSecret(fr.asString());
-        encryptTwoKeys(secret, key1, key2);
-        System.out.println(alphabet);
-        System.out.println(shiftedAlphabet);
-        System.out.println(shifted2);
-        System.out.println("Message to encode: " + secret);
-        System.out.println("Encoded message is: " + cypherString);
+    public HashMap<Character, Character> getEncrypt2() {
+        return encrypt2;
     }
 
-    public String[] getCommon() {
-        FileResource fr = new FileResource(".//Resources//decrypt//common.txt");
-        String[] common = new String[20];
-        int index = 0;
-        for (String s : fr.words()) {
-            common[index] = s;
-            index++;
-        }
-        return common;
-    }
-
-    public int biggestIndex(int[] counters) {
-        int index = 0;
-        int currentIndex = 0;
-        for (int i : counters) {
-            currentIndex = i;
-            if (currentIndex > index) {
-                index = currentIndex;
+    public void setEncrypt2() {
+        encrypt2 = new HashMap<>();
+        int offset = key2;
+        int i=1;
+        for (char a='a'; a <='z' ; a++) {
+            char currentChar= (char) (a+offset);
+            if (currentChar<122){
+                encrypt2.put(a,currentChar);
             }
-        }
-        return index;
-    }
 
-    public void bruteForceDecrypt(String encrypted) {
+            if (currentChar>122){
+                currentChar= (char)(currentChar-122+97);
+                encrypt2.put(a,currentChar);
+            }
 
-        for (int i = 0; i < 26; i++) {
-            Cypher c = new Cypher(i, encrypted);
-            String s = c.cypherString.toString();
-            System.out.println(i + " is the key for: " + s);
+            i++;
         }
     }
 
-    public String[] allDecodedStrings(String encrypted) {
-        String[] decodedStrings = new String[26];
-        for (int i = 0; i < 26; i++) {
-            Cypher c = new Cypher(i, encrypted);
-            String s = c.cypherString.toString();
-            decodedStrings[i] = s;
-        }
-        return decodedStrings;
+    public HashMap<Character, Character> getDecrypt1() {
+        return decrypt1;
     }
 
+    public void setDecrypt1(int key) {
+        decrypt1= new HashMap<>();
+        int offset = key;
+        int i=1;
+        for (char a='a'; a <='z' ; a++) {
+            char currentChar= (char) (a+offset);
+            if (currentChar<122){
+                decrypt1.put(a,currentChar);
+            }
+
+            if (currentChar>122){
+                currentChar= (char)(currentChar-122+97);
+                decrypt1.put(a,currentChar);
+            }
+
+            i++;
+        }
+    }
+
+    public HashMap<Character, Character> getDecrypt2() {
+        return decrypt2;
+    }
+
+    public void setDecrypt2(int key) {
+        decrypt2= new HashMap<>();
+        int offset = key;
+        int i=1;
+        for (char a='a'; a <='z' ; a++) {
+            char currentChar= (char) (a+offset);
+            if (currentChar<122){
+                decrypt2.put(a,currentChar);
+            }
+
+            if (currentChar>122){
+                currentChar= (char)(currentChar-122+97);
+                decrypt2.put(a,currentChar);
+            }
+
+            i++;
+        }
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput() {
+        this.output = output;
+    }
 }
