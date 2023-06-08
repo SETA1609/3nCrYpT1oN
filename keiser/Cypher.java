@@ -8,8 +8,6 @@ public class Cypher {
     private HashMap<Integer, Character> alpha;
     private HashMap<Character, Character> encrypt1;
     private HashMap<Character, Character> encrypt2;
-    private HashMap<Character, Character> decrypt1;
-    private HashMap<Character, Character> decrypt2;
     private String input;
     private String output;
 
@@ -73,14 +71,12 @@ public class Cypher {
         int i = 1;
         for (char a = 'a'; a <= 'z'; a++) {
             char currentChar = (char) (a + offset);
-            if (currentChar < 122) {
-                encrypt1.put(a, currentChar);
-            }
-
-            if (currentChar > 122) {
+            if (currentChar > 'z') {
                 currentChar = (char) (currentChar - 26);
-                encrypt1.put(a, currentChar);
+            } else if (currentChar < 'a') {
+                currentChar = (char) (currentChar + 26);
             }
+            encrypt1.put(a, currentChar);
 
             i++;
         }
@@ -96,60 +92,12 @@ public class Cypher {
         int i = 1;
         for (char a = 'a'; a <= 'z'; a++) {
             char currentChar = (char) (a + offset);
-            if (currentChar < 122) {
-                encrypt2.put(a, currentChar);
-            }
-
-            if (currentChar > 122) {
+            if (currentChar > 'z') {
                 currentChar = (char) (currentChar - 26);
-                encrypt2.put(a, currentChar);
+            } else if (currentChar < 'a') {
+                currentChar = (char) (currentChar + 26);
             }
-
-            i++;
-        }
-    }
-
-    public HashMap<Character, Character> getDecrypt1() {
-        return decrypt1;
-    }
-
-    public void setDecrypt1(int key) {
-        decrypt1 = new HashMap<>();
-        int offset = key;
-        int i = 1;
-        for (char a = 'a'; a <= 'z'; a++) {
-            char currentChar = (char) (a + offset);
-            if (currentChar < 122) {
-                decrypt1.put(a, currentChar);
-            }
-
-            if (currentChar > 122) {
-                currentChar = (char) (currentChar - 26);
-                decrypt1.put(a, currentChar);
-            }
-
-            i++;
-        }
-    }
-
-    public HashMap<Character, Character> getDecrypt2() {
-        return decrypt2;
-    }
-
-    public void setDecrypt2(int key) {
-        decrypt2 = new HashMap<>();
-        int offset = key;
-        int i = 1;
-        for (char a = 'a'; a <= 'z'; a++) {
-            char currentChar = (char) (a + offset);
-            if (currentChar < 122) {
-                decrypt2.put(a, currentChar);
-            }
-
-            if (currentChar > 122) {
-                currentChar = (char) (currentChar - 26);
-                decrypt2.put(a, currentChar);
-            }
+            encrypt2.put(a, currentChar);
 
             i++;
         }
@@ -175,7 +123,7 @@ public class Cypher {
                 boolean isLetter = Character.isLetter(c);
                 if (isLetter) {
                     boolean isUppercase = Character.isUpperCase(c);
-                    char newChar = isUppercase ? (char) (encrypt1.get(c) - 32) : encrypt1.get(c);
+                    char newChar = isUppercase ? (char) (encrypt1.get(Character.toLowerCase(c)) - 32) : encrypt1.get(c);
                     sb.append(newChar);
                 } else {
                     sb.append(c);
@@ -190,7 +138,9 @@ public class Cypher {
                 if (isLetter) {
                     boolean isUppercase = Character.isUpperCase(crrntChar);
                     if (isUppercase) {
-                        char newChar = (i % 2 == 0) ? (char) (encrypt1.get(crrntChar) - 32) : (char) (encrypt2.get(crrntChar) - 32);
+                        char newChar = (i % 2 == 0) ? (char) (encrypt1.get(Character.toLowerCase(crrntChar)) - 32)
+                                : (char) (encrypt2.get(Character.toLowerCase(crrntChar)) - 32);
+
                         sb.append(newChar);
                     } else {
                         char newChar = (i % 2 == 0) ? encrypt1.get(crrntChar) : encrypt2.get(crrntChar);
