@@ -11,6 +11,26 @@ public class Cypher {
     private HashMap<Character, Character> shiftedWithKey2 = new HashMap<>();
     private StringBuilder output=new StringBuilder();
 
+    public Cypher(int key1, String input) {
+        reset();
+        setKey1(key1);
+        setInput(input);
+        setAlphabet();
+        setShiftedWithKey1();
+        setOutput();
+    }
+
+    public Cypher(int key1, int key2, String input) {
+        reset();
+        setKey1(key1);
+        setKey2(key2);
+        setInput(input);
+        setAlphabet();
+        setShiftedWithKey1();
+        setShiftedWithKey2();
+        setOutput();
+    }
+
     public int getKey1() {
         return key1;
     }
@@ -99,25 +119,7 @@ public class Cypher {
         }
     }
 
-    public Cypher(int key1, String input) {
-        reset();
-        setKey1(key1);
-        setInput(input);
-        setAlphabet();
-        setShiftedWithKey1();
-        setOutput();
-    }
 
-    public Cypher(int key1, int key2, String input) {
-        reset();
-        setKey1(key1);
-        setKey2(key2);
-        setInput(input);
-        setAlphabet();
-        setShiftedWithKey1();
-        setShiftedWithKey2();
-        setOutput();
-    }
 
     public void reset(){
         setInput("");
