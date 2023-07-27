@@ -73,7 +73,7 @@ public class Cypher {
     public void setShiftedWithKey1() {
         for (int i = 'a'; i <='z' ; i++) {
             char currentMappedChar =(char) (i+key1)>'z'?(char) (i+key1-26) :(char) (i+key1);
-            alphabet.put(i, currentMappedChar);
+            shiftedWithKey1.put((char) i, currentMappedChar);
         }
     }
 
@@ -84,7 +84,7 @@ public class Cypher {
     public void setShiftedWithKey2() {
         for (int i = 'a'; i <='z' ; i++) {
             char currentMappedChar =(char) (i+key2)>'z'?(char) (i+key2-26) :(char) (i+key2);
-            alphabet.put(i, currentMappedChar);
+            shiftedWithKey2.put((char) i, currentMappedChar);
         }
     }
 
@@ -95,8 +95,10 @@ public class Cypher {
     public void setOutput() {
         if (key2==0){
             for (char letter: input.toCharArray()) {
-                if (Character.isAlphabetic(letter)){
-                    output.append(shiftedWithKey1.get(letter));
+                if (Character.isLetter(letter)){
+                    Character charToLowercase=Character.toLowerCase(letter);
+                    char mappedChar=shiftedWithKey1.get(charToLowercase);
+                    output.append(Character.isUpperCase(letter)?Character.toUpperCase(mappedChar):mappedChar);
                 }else{
                     output.append(letter);
                 }
@@ -104,11 +106,12 @@ public class Cypher {
         }else{
             for (int i = 0; i <input.length() ; i++) {
                 char currentChar = input.charAt(i);
-                if (!Character.isAlphabetic(currentChar)){
+                if (!Character.isLetter(currentChar)){
                     output.append(currentChar);
                 }else {
                     if (i%2==0){
-                        char mappedChar=shiftedWithKey1.get(currentChar);
+                        Character charToLowercase=Character.toLowerCase(currentChar);
+                        char mappedChar=shiftedWithKey1.get(charToLowercase);
                         output.append((Character.isUpperCase(currentChar))?Character.toUpperCase(mappedChar):mappedChar);
                     }else{
                         char mappedChar=shiftedWithKey2.get(currentChar);
@@ -127,6 +130,6 @@ public class Cypher {
         setKey2(0);
         shiftedWithKey1.clear();
         shiftedWithKey2.clear();
-        output.delete(0,output.length()-1);
+        output.replace(0,output.length(),"");
     }
 }
