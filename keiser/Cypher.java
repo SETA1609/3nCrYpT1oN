@@ -125,6 +125,8 @@ public class Cypher {
         setInput("");
         setKey1(0);
         setKey2(0);
+        shiftedWithKey1.clear();
+        shiftedWithKey2.clear();
         output.delete(0,output.length()-1);
     }
 }
