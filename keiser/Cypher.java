@@ -3,34 +3,13 @@ package keiser;
 import java.util.HashMap;
 
 public class Cypher {
-    private int key1 = 0;
-    private int key2 = 0;
-    private HashMap<Integer, Character> alpha;
-    private HashMap<Character, Character> encrypt1;
-    private HashMap<Character, Character> encrypt2;
-    private String input;
-    private String output;
-
-    public Cypher() {
-    }
-
-    public Cypher(int key1, String input) {
-        this.key1 = key1;
-        this.input = input;
-        setAlpha();
-        setEncrypt1();
-        setOutput();
-    }
-
-    public Cypher(int key1, int key2, String input) {
-        this.key1 = key1;
-        this.key2 = key2;
-        this.input = input;
-        setAlpha();
-        setEncrypt1();
-        setEncrypt2();
-        setOutput();
-    }
+    private int key1=0;
+    private int key2=0;
+    private String input = "";
+    private HashMap<Integer, Character> alphabet = new HashMap<>();
+    private HashMap<Character, Character> shiftedWithKey1 = new HashMap<>();
+    private HashMap<Character, Character> shiftedWithKey2 = new HashMap<>();
+    private StringBuilder output=new StringBuilder();
 
     public int getKey1() {
         return key1;
@@ -48,61 +27,6 @@ public class Cypher {
         this.key2 = key2;
     }
 
-    public HashMap<Integer, Character> getAlpha() {
-        return alpha;
-    }
-
-    public void setAlpha() {
-        alpha = new HashMap<>();
-        int i = 1;
-        for (char a = 'a'; a <= 'z'; a++) {
-            alpha.put(i, a);
-            i++;
-        }
-    }
-
-    public HashMap<Character, Character> getEncrypt1() {
-        return encrypt1;
-    }
-
-    public void setEncrypt1() {
-        encrypt1 = new HashMap<>();
-        int offset = key1;
-        int i = 1;
-        for (char a = 'a'; a <= 'z'; a++) {
-            char currentChar = (char) (a + offset);
-            if (currentChar > 'z') {
-                currentChar = (char) (currentChar - 26);
-            } else if (currentChar < 'a') {
-                currentChar = (char) (currentChar + 26);
-            }
-            encrypt1.put(a, currentChar);
-
-            i++;
-        }
-    }
-
-    public HashMap<Character, Character> getEncrypt2() {
-        return encrypt2;
-    }
-
-    public void setEncrypt2() {
-        encrypt2 = new HashMap<>();
-        int offset = key2;
-        int i = 1;
-        for (char a = 'a'; a <= 'z'; a++) {
-            char currentChar = (char) (a + offset);
-            if (currentChar > 'z') {
-                currentChar = (char) (currentChar - 26);
-            } else if (currentChar < 'a') {
-                currentChar = (char) (currentChar + 26);
-            }
-            encrypt2.put(a, currentChar);
-
-            i++;
-        }
-    }
-
     public String getInput() {
         return input;
     }
@@ -111,54 +35,94 @@ public class Cypher {
         this.input = input;
     }
 
+    public HashMap<Integer, Character> getAlphabet() {
+        return alphabet;
+    }
+
+    public void setAlphabet() {
+        for (int i = 1; i <= 26; i++) {
+            char currentChar = (char) ('a' + i - 1);
+            alphabet.put(i, currentChar);
+        }
+    }
+
+    public HashMap<Character, Character> getShiftedWithKey1() {
+        return shiftedWithKey1;
+    }
+
+    public void setShiftedWithKey1() {
+        for (int i = 'a'; i <='z' ; i++) {
+            char currentMappedChar =(char) (i+key1)>'z'?(char) (i+key1-26) :(char) (i+key1);
+            alphabet.put(i, currentMappedChar);
+        }
+    }
+
+    public HashMap<Character, Character> getShiftedWithKey2() {
+        return shiftedWithKey2;
+    }
+
+    public void setShiftedWithKey2() {
+        for (int i = 'a'; i <='z' ; i++) {
+            char currentMappedChar =(char) (i+key2)>'z'?(char) (i+key2-26) :(char) (i+key2);
+            alphabet.put(i, currentMappedChar);
+        }
+    }
+
     public String getOutput() {
-        return output;
+        return output.toString();
     }
 
     public void setOutput() {
-        StringBuilder sb = new StringBuilder();
-
-        if (key1 != 0 && key2 == 0) {
-            for (char c : input.toCharArray()) {
-                boolean isLetter = Character.isLetter(c);
-                if (isLetter) {
-                    boolean isUppercase = Character.isUpperCase(c);
-                    char newChar = isUppercase ? (char) (encrypt1.get(Character.toLowerCase(c)) - 32) : encrypt1.get(c);
-                    sb.append(newChar);
-                } else {
-                    sb.append(c);
+        if (key2==0){
+            for (char letter: input.toCharArray()) {
+                if (Character.isAlphabetic(letter)){
+                    output.append(shiftedWithKey1.get(letter));
+                }else{
+                    output.append(letter);
                 }
             }
-        }
-
-        if (key1 != 0 && key2 != 0) {
-            for (int i = 0; i < input.length(); i++) {
-                char crrntChar = input.charAt(i);
-                boolean isLetter = Character.isLetter(crrntChar);
-                if (isLetter) {
-                    boolean isUppercase = Character.isUpperCase(crrntChar);
-                    if (isUppercase) {
-                        char newChar = (i % 2 == 0) ? (char) (encrypt1.get(Character.toLowerCase(crrntChar)) - 32)
-                                : (char) (encrypt2.get(Character.toLowerCase(crrntChar)) - 32);
-
-                        sb.append(newChar);
-                    } else {
-                        char newChar = (i % 2 == 0) ? encrypt1.get(crrntChar) : encrypt2.get(crrntChar);
-                        sb.append(newChar);
+        }else{
+            for (int i = 0; i <input.length() ; i++) {
+                char currentChar = input.charAt(i);
+                if (!Character.isAlphabetic(currentChar)){
+                    output.append(currentChar);
+                }else {
+                    if (i%2==0){
+                        char mappedChar=shiftedWithKey1.get(currentChar);
+                        output.append((Character.isUpperCase(currentChar))?Character.toUpperCase(mappedChar):mappedChar);
+                    }else{
+                        char mappedChar=shiftedWithKey2.get(currentChar);
+                        output.append((Character.isUpperCase(currentChar))?Character.toUpperCase(mappedChar):mappedChar);
                     }
-                } else {
-                    sb.append(crrntChar);
                 }
             }
         }
-        output = sb.toString();
     }
 
-    public void reset() {
-        setInput("");
-        setKey1(0);
-        setKey2(0);
+    public Cypher(int key1, String input) {
+        reset();
+        setKey1(key1);
+        setInput(input);
+        setAlphabet();
+        setShiftedWithKey1();
         setOutput();
     }
 
+    public Cypher(int key1, int key2, String input) {
+        reset();
+        setKey1(key1);
+        setKey2(key2);
+        setInput(input);
+        setAlphabet();
+        setShiftedWithKey1();
+        setShiftedWithKey2();
+        setOutput();
+    }
+
+    public void reset(){
+        setInput("");
+        setKey1(0);
+        setKey2(0);
+        output.delete(0,output.length()-1);
+    }
 }
