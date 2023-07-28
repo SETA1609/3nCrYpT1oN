@@ -20,8 +20,30 @@ public class WordPlay {
 
 
     public String replaceVowels(String phrase, Character ch) {
-        return phrase;
 
+        for (int i = 0; i <phrase.length() ; i++) {
+            char currentChar=phrase.charAt(i);
+            if (isVowel(currentChar)){
+               phrase= phrase.replace(currentChar,ch);
+            }
+        }
+        return phrase;
+    }
+
+    public String emphasize(String phrase, Character ch){
+
+        char[] phraseArray= phrase.toCharArray();
+        for (int i = 0; i <phraseArray.length ; i++) {
+            char currentChar=Character.isUpperCase(ch)?Character.toUpperCase(phrase.charAt(i)):Character.toLowerCase(phrase.charAt(i));
+            if (currentChar==ch){
+                if (i%2==0){
+                    phraseArray[i]='*';
+                } else {
+                    phraseArray[i]='+';
+                }
+            }
+        }
+        return new String(phraseArray);
     }
 
 }
