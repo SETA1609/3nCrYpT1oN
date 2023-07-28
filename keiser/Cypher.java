@@ -1,6 +1,8 @@
 package keiser;
 
-import java.util.HashMap;
+import edu.duke.FileResource;
+
+import java.util.*;
 
 public class Cypher {
     private int key1=0;
@@ -144,16 +146,24 @@ public class Cypher {
         output.replace(0,output.length(),"");
     }
 
-    public void encryptWithOneKey(String input,int key1){
+    public String encryptWithOneKey(String input,int key1){
         reset();
         setAlphabet();
         setKey1(key1);
         setInput(input);
         setShiftedWithKey1();
         setOutput();
+        return new String(output);
     }
 
-    public  void encryptWithTwoKeys(String input,int key1,int key2){
+    public void testEncryptWithOneKey(){
+        FileResource fr = new FileResource();
+        String message = fr.asString();
+        String encrypted = encryptWithOneKey(message, key1);
+        System.out.println("key is " + key1 + "\n" + encrypted);
+    }
+
+    public  String encryptWithTwoKeys(String input,int key1,int key2){
         reset();
         setKey1(key1);
         setKey2(key2);
@@ -162,6 +172,7 @@ public class Cypher {
         setShiftedWithKey1();
         setShiftedWithKey2();
         setOutput();
+        return new String(output);
     }
 
 }
