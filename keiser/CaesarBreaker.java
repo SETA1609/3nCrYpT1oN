@@ -44,8 +44,9 @@ public class CaesarBreaker {
     }
 
     public void setCommonWords() {
-        commonWords = new HashSet<String>(List.of(new String[]{"the","a","i", "of", "and", "to", "in", "for", "is", "on", "that", "by", "this", "with", "you", "it", "not", "or", "be", "are"}));
+        commonWords = new HashSet<String>(List.of(new String[]{"the", "a", "i", "of", "and", "to", "in", "for", "is", "on", "that", "by", "this", "with", "you", "it", "not", "or", "be", "are"}));
     }
+
     public int getKey1() {
         return key1;
     }
@@ -75,27 +76,27 @@ public class CaesarBreaker {
         return counter;
     }
 
-    public int countLetterFreq(String input){
-        int counter=0;
+    public int countLetterFreq(String input) {
+        int counter = 0;
         HashSet<Character> commonCharacters = new HashSet<>();
         commonCharacters.add('e');
         commonCharacters.add('t');
         commonCharacters.add('a');
         commonCharacters.add('o');
         commonCharacters.add('i');
-        for (Character letter:input.toCharArray()) {
-            if (commonCharacters.contains(letter)){
+        for (Character letter : input.toCharArray()) {
+            if (commonCharacters.contains(letter)) {
                 counter++;
             }
         }
         return counter;
     }
 
-    public HashMap<Integer,Integer> countIndexForOneKey(String[] bruteForceStrings) {
-        HashMap<Integer,Integer> countIndexForOneKey = new HashMap<>();
+    public HashMap<Integer, Integer> countIndexForOneKey(String[] bruteForceStrings) {
+        HashMap<Integer, Integer> countIndexForOneKey = new HashMap<>();
         for (int i = 0; i < 26; i++) {
-            int count = countCommonWords(bruteForceStrings[i])+countLetterFreq(bruteForceStrings[i]);
-            countIndexForOneKey.put(i+1,count);
+            int count = countCommonWords(bruteForceStrings[i]) + countLetterFreq(bruteForceStrings[i]);
+            countIndexForOneKey.put(i + 1, count);
         }
         System.out.println(countIndexForOneKey);
         return countIndexForOneKey;
@@ -123,52 +124,70 @@ public class CaesarBreaker {
 
     public String decryptOneKey(String input) {
         String[] decodedStrings = decodedStringsForOneKey(input);
-        HashMap<Integer,Integer>countIndex = countIndexForOneKey(decodedStrings);
-        WorldLengths wl=new WorldLengths();
+        HashMap<Integer, Integer> countIndex = countIndexForOneKey(decodedStrings);
+        WorldLengths wl = new WorldLengths();
         int biggestIndex = wl.biggestIndex(countIndex);
-        setKey1(getKeyByValue(countIndex,biggestIndex));
+        setKey1(getKeyByValue(countIndex, biggestIndex));
         System.out.println(key1);
         Cypher c = new Cypher(getKey1(), input);
         setOutput(c.getOutput());
         return new String(getOutput());
     }
 
-    public String[][] decodedStringsForTwoKeys(String input){
+    public String[][] decodedStringsForTwoKeys(String input) {
         String[][] decodedStrings = new String[26][26];
 
-        for (int i = 0; i <26 ; i++) {
-            for (int j = 0; j <26 ; j++) {
-                Cypher c = new Cypher((i + 1),(j+1), input);
-                decodedStrings[i][j]=c.getOutput();
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                Cypher c = new Cypher((i + 1), (j + 1), input);
+                decodedStrings[i][j] = c.getOutput();
             }
         }
 
         return decodedStrings;
     }
 
-    public HashMap<Integer,Integer> countIndexForTwoKeys(String[][] bruteForceStrings) {
-        HashMap<Integer,Integer> countIndexForOneKey = new HashMap<>();
+    public HashMap<Integer, Integer> countIndexForTwoKeys(String[][] bruteForceStrings) {
+        HashMap<Integer, Integer> countIndexForTwoKeys = new HashMap<>();
+        int sum;
         for (int i = 0; i < 26; i++) {
-            for (int j = 0; j <26 ; j++) {
-                int count = countCommonWords(bruteForceStrings[i][j])+countLetterFreq(bruteForceStrings[i][j]);
-                countIndexForOneKey.put(((i+1) * 26 + (j+1)),count);
+            HashMap<Integer, Integer> count1 = countIndexForOneKey(bruteForceStrings[i]);
+            sum = 0;
+            sum = totalSum(count1);
+            System.out.println(sum);
+            // Sum the frequencies for the current first key
+            for (int j = 0; j < 26; j++) {
+                int count = sum + countCommonWords(bruteForceStrings[i][j]) + countLetterFreq(bruteForceStrings[i][j]);
+               // System.out.println(count);
+                countIndexForTwoKeys.put(i * 26 + (j + 1), count);
             }
-
         }
-        System.out.println(countIndexForOneKey);
-        return countIndexForOneKey;
+        System.out.println(countIndexForTwoKeys);
+        return countIndexForTwoKeys;
     }
 
-    public String decryptTwoKeys(String input){
-        String[][] decodedStrings=decodedStringsForTwoKeys(input);
+
+    private Integer totalSum(HashMap<Integer, Integer> count1) {
+        int tmp = 0;
+
+        for (Map.Entry<Integer, Integer> entry : count1.entrySet()) {
+            tmp += entry.getValue();
+        }
+
+        return tmp;
+    }
+
+    public String decryptTwoKeys(String input) {
+        String[][] decodedStrings = decodedStringsForTwoKeys(input);
         System.out.println(Arrays.deepToString(decodedStrings));
-        WorldLengths wl=new WorldLengths();
-        HashMap<Integer,Integer>countIndex =countIndexForTwoKeys(decodedStrings);
-        int bigIndex=wl.biggestIndex(countIndex);
-        setKey1(bigIndex/26+1);
-        setKey2(bigIndex%2+1);
-        System.out.println(key1+" "+key2);
-        Cypher c = new Cypher(key1,key2, input);
+        WorldLengths wl = new WorldLengths();
+        HashMap<Integer, Integer> countIndex = countIndexForTwoKeys(decodedStrings);
+        int bigIndex = wl.biggestIndex(countIndex);
+        System.out.println(bigIndex);
+        setKey1(bigIndex / 26 );
+        setKey2(bigIndex % 26 + 1);
+        System.out.println(key1 + " " + key2);
+        Cypher c = new Cypher(key1, key2, input);
         setOutput(c.getOutput());
         return new String(getOutput());
     }
