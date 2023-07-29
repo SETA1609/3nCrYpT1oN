@@ -2,6 +2,8 @@ package keiser;
 
 import edu.duke.FileResource;
 
+import java.util.HashMap;
+
 public class WorldLengths {
     public boolean needToReduce(String word) {
         return !Character.isLetter(word.charAt(0)) || !Character.isLetter(word.charAt(word.length()-1));
@@ -12,6 +14,18 @@ public class WorldLengths {
         int currentIndex = 0;
         for (int i : counts) {
             currentIndex = i;
+            if (currentIndex > index) {
+                index = currentIndex;
+            }
+        }
+        return index;
+    }
+
+    public int biggestIndex(HashMap<Integer,Integer> counts) {
+        int index = 0;
+        int currentIndex = 0;
+        for (int i = 1; i < counts.size(); i++) {
+            currentIndex = counts.getOrDefault(i, 0);
             if (currentIndex > index) {
                 index = currentIndex;
             }
