@@ -16,10 +16,15 @@ public class Solution {
 
         System.out.println(w.emphasize("Mary Bella Abracadabra", 'a'));
         //M+ry Bell+ +br*c*d*br+
-
+FileResource fr = new FileResource();
+String input = fr.toString();
         CaesarBreaker cb = new CaesarBreaker();
         System.out.println(cb.decryptOneKey("Yz Z rd Tric"));
-        System.out.println(cb.decryptTwoKeys("Czojq Ivdzle"));
+        System.out.println(cb.decryptTwoKeys(input));
+        WorldLengths wl =new WorldLengths();
+      //  wl.testCountWordLengths();
+        Cypher c4 = new Cypher(24,6,"Top ncmy qkff vi vguv vbg ycpx");
+        System.out.println(c4.getOutput());
 
     }
 }
