@@ -16,15 +16,24 @@ public class Solution {
 
         System.out.println(w.emphasize("Mary Bella Abracadabra", 'a'));
         //M+ry Bell+ +br*c*d*br+
-FileResource fr = new FileResource();
-String input = fr.toString();
+//FileResource fr = new FileResource();
+//String input = fr.asString();
+
         CaesarBreaker cb = new CaesarBreaker();
         System.out.println(cb.decryptOneKey("Yz Z rd Tric"));
-        System.out.println(cb.decryptTwoKeys(input));
-        WorldLengths wl =new WorldLengths();
-      //  wl.testCountWordLengths();
-        Cypher c4 = new Cypher(24,6,"Top ncmy qkff vi vguv vbg ycpx");
+        // System.out.println(cb.decryptTwoKeys(input));
+        // WorldLengths wl =new WorldLengths();
+        //  wl.testCountWordLengths();
+        Cypher c4 = new Cypher(24, 6, "Top ncmy qkff vi vguv vbg ycpx");
         System.out.println(c4.getOutput());
+        CaesarCipher cc = new CaesarCipher(17);
+        System.out.println(cc.encrypt("Hi I am Carl"));
+        System.out.println(cc.decrypt("Yz Z rd Tric"));
+
+        TestCaesarCipher t = new TestCaesarCipher();
+        TestCaesarCipherTwo t2= new TestCaesarCipherTwo();
+       // t.simpleTests();
+        t2.simpleTests();
 
     }
 }

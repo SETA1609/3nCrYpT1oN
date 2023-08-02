@@ -178,17 +178,34 @@ public class CaesarBreaker {
     }
 
     public String decryptTwoKeys(String input) {
-        String[][] decodedStrings = decodedStringsForTwoKeys(input);
-        System.out.println(Arrays.deepToString(decodedStrings));
-        WorldLengths wl = new WorldLengths();
-        HashMap<Integer, Integer> countIndex = countIndexForTwoKeys(decodedStrings);
-        int bigIndex = wl.biggestIndex(countIndex);
-        System.out.println(bigIndex);
-        setKey1(bigIndex / 26 );
-        setKey2(bigIndex % 26 + 1);
-        System.out.println(key1 + " " + key2);
-        Cypher c = new Cypher(key1, key2, input);
-        setOutput(c.getOutput());
+        StringBuilder firsthalft= new StringBuilder();
+        StringBuilder secondhalft= new StringBuilder();
+
+        for (int i = 0; i <input.length() ; i++) {
+            if (i%2==0){
+                firsthalft.append(input.charAt(i));
+            }else{
+                secondhalft.append(input.charAt(i));
+            }
+        }
+
+        String decoded1=decryptOneKey(new String(firsthalft));
+        String decoded2=decryptOneKey(new String(secondhalft));
+        System.out.println("1: "+decoded1+" 2: "+decoded2);
+        setOutput("");
+        int index1=0;
+        int index2=0;
+
+        for (int i = 0; i <input.length() ; i++) {
+            if (i%2==0){
+                output.append(decoded1.charAt(index1));
+                index1++;
+            }else {
+                output.append(decoded2.charAt(index2));
+                index2++;
+            }
+        }
+
         return new String(getOutput());
     }
 
