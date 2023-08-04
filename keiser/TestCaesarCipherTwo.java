@@ -4,18 +4,19 @@ import edu.duke.FileResource;
 
 public class TestCaesarCipherTwo {
     public void simpleTests(){
-        CaesarCipherTwo cc = new CaesarCipherTwo(17,3);
+
         FileResource fr= new FileResource();
         String input = fr.asString();
-        String encryptedString= cc.encrypt(input);
-        cc.decrypt(encryptedString);
-        int key1=cc.getMasterKey1();
-        int key2=cc.getMasterKey2();
-        String decryptedString= cc.decrypt(encryptedString);
-        System.out.println("Encrypted String: "+encryptedString);
-        System.out.println("Decrypted String: "+decryptedString);
-        System.out.println("Key1: "+key1);
-        System.out.println("Key2:"+ key2);
+        CaesarCipherTwo cc = new CaesarCipherTwo(21,8,input);
+        CaesarCipherTwo cc2 = new CaesarCipherTwo(cc.getText());
+
+        int key1=cc2.getDecryptionKey1();
+        int key2=cc2.getDecryptionKey2();
+
+        System.out.println("Encrypted String: "+ cc.getText());
+        System.out.println("Decrypted String: "+ cc2.getText());
+        System.out.println("Decryption key1: "+ key1+" for key 1: "+cc.getKey1());
+        System.out.println("Decryption key2: "+ key2+" for key 1: "+cc.getKey1());
 
     }
 }

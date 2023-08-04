@@ -16,11 +16,10 @@ public class Solution {
 
         System.out.println(w.emphasize("Mary Bella Abracadabra", 'a'));
         //M+ry Bell+ +br*c*d*br+
-//FileResource fr = new FileResource();
-//String input = fr.asString();
+        //FileResource fr = new FileResource();
+        //String input = fr.asString();
 
-        CaesarBreaker cb = new CaesarBreaker();
-        System.out.println(cb.decryptOneKey("Yz Z rd Tric"));
+
         // System.out.println(cb.decryptTwoKeys(input));
         // WorldLengths wl =new WorldLengths();
         //  wl.testCountWordLengths();
@@ -32,7 +31,7 @@ public class Solution {
 
         TestCaesarCipher t = new TestCaesarCipher();
         TestCaesarCipherTwo t2= new TestCaesarCipherTwo();
-       // t.simpleTests();
+     // t.simpleTests();
         t2.simpleTests();
 
     }
