@@ -141,8 +141,8 @@ public class CaesarCipher {
         String[] decodedStrings = new String[26];
 
         for (int i = 0; i < 26; i++) {
-            Cypher c = new Cypher(i + 1, input);
-            decodedStrings[i] = c.getOutput();
+            CaesarCipher c = new CaesarCipher((i + 1), input);
+            decodedStrings[i] = c.getText();
         }
 
         return decodedStrings;

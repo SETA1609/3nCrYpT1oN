@@ -16,7 +16,7 @@ public class TestCaesarCipherTwo {
         System.out.println("Encrypted String: "+ cc.getText());
         System.out.println("Decrypted String: "+ cc2.getText());
         System.out.println("Decryption key1: "+ key1+" for key 1: "+cc.getKey1());
-        System.out.println("Decryption key2: "+ key2+" for key 1: "+cc.getKey1());
+        System.out.println("Decryption key2: "+ key2+" for key 2: "+cc.getKey2());
 
     }
 }
