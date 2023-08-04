@@ -4,14 +4,40 @@ import java.util.*;
 
 public class CaesarCipher {
     private int key;
-    private int masterKey;
-    private HashMap<Integer, Character> alphabet = new HashMap<>();
-    private HashMap<Character, Character> shifted = new HashMap<>();
+    private int decryptionKey;
+    private String text;
+    private HashMap<Integer, Character> alphabet ;
+    private HashMap<Character, Character> shifted ;
+
+    public CaesarCipher() {
+        setAlphabet();
+        setKey(0);
+        shifted= new HashMap<>();
+        setText("");
+        setDecryptionKey(26-key);
+    }
 
     public CaesarCipher(int key) {
         setKey(key);
         setAlphabet();
         setShifted();
+        setText("");
+        setDecryptionKey(26-key);
+    }
+
+    public CaesarCipher(int key, String text) {
+        setKey(key);
+        setAlphabet();
+        setShifted();
+        setText(encrypt(text));
+    }
+
+    public CaesarCipher(String text) {
+        setAlphabet();
+        decrypt(text);
+        setKey(26-decryptionKey);
+        setShifted();
+        setText(decrypt(text));
     }
 
     public int getKey() {
@@ -22,12 +48,12 @@ public class CaesarCipher {
         this.key = key;
     }
 
-    public int getMasterKey() {
-        return masterKey;
+    public int getDecryptionKey() {
+        return decryptionKey;
     }
 
-    public void setMasterKey(int masterKey) {
-        this.masterKey = masterKey;
+    public void setDecryptionKey(int decryptionKey) {
+        this.decryptionKey = decryptionKey;
     }
 
     public HashMap<Integer, Character> getAlphabet() {
@@ -35,6 +61,7 @@ public class CaesarCipher {
     }
 
     public void setAlphabet() {
+        alphabet= new HashMap<>();
         for (int i = 1; i <= 26; i++) {
             char currentChar = (char) ('a' + i - 1);
             alphabet.put(i, currentChar);
@@ -46,10 +73,19 @@ public class CaesarCipher {
     }
 
     public void setShifted() {
+        shifted= new HashMap<>();
         for (int i = 'a'; i <= 'z'; i++) {
             char currentMappedChar = (char) (i + key) > 'z' ? (char) (i + key - 26) : (char) (i + key);
             shifted.put((char) i, currentMappedChar);
         }
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String encrypt(String input) {
@@ -81,12 +117,8 @@ public class CaesarCipher {
 
     public int countLetterFreq(String input) {
         int counter = 0;
-        HashSet<Character> commonCharacters = new HashSet<>();
-        commonCharacters.add('e');
-        commonCharacters.add('t');
-        commonCharacters.add('a');
-        commonCharacters.add('o');
-        commonCharacters.add('i');
+        HashSet<Character> commonCharacters = new HashSet<Character>(List.of(new Character[]{'a','e','t','n','i','o'}));
+
         for (Character letter : input.toCharArray()) {
             if (commonCharacters.contains(letter)) {
                 counter++;
@@ -98,7 +130,7 @@ public class CaesarCipher {
     public HashMap<Integer, Integer> countIndexForOneKey(String[] bruteForceStrings) {
         HashMap<Integer, Integer> countIndexForOneKey = new HashMap<>();
         for (int i = 0; i < 26; i++) {
-            int count = countCommonWords(bruteForceStrings[i]) + countLetterFreq(bruteForceStrings[i]);
+            int count =  countLetterFreq(bruteForceStrings[i]);
             countIndexForOneKey.put(i + 1, count);
         }
 
@@ -132,7 +164,7 @@ public class CaesarCipher {
         WorldLengths wl = new WorldLengths();
         int biggestIndex = wl.biggestIndex(countIndex);
         mainKey = getKeyByValue(countIndex, biggestIndex);
-        setMasterKey(mainKey);
+        setDecryptionKey(mainKey);
         CaesarCipher cc = new CaesarCipher(mainKey);
         return cc.encrypt(input);
     }

@@ -7,12 +7,11 @@ public class TestCaesarCipher {
     public void simpleTests(){
         FileResource fr = new FileResource();
         String input = fr.asString();
-        CaesarCipher cc = new CaesarCipher(18);
-        String encryptedInput=cc.encrypt(input);
-        cc.decrypt(encryptedInput);
-        int key = cc.getMasterKey();
-        System.out.println("Encrypted: "+encryptedInput);
-        System.out.println("decrypted: "+cc.decrypt(encryptedInput));
+        CaesarCipher cc = new CaesarCipher(15,input);
+        CaesarCipher ccDecryption = new CaesarCipher(cc.getText());
+        int key = ccDecryption.getDecryptionKey();
+        System.out.println("Encrypted: "+cc.getText());
+        System.out.println("decrypted: "+ccDecryption.getText());
         System.out.println("Key for decryption: "+key);
     }
 

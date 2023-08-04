@@ -6,8 +6,9 @@ public class CaesarCipherTwo {
 
     private int key1;
     private int key2;
-    private int masterKey1;
-    private int masterKey2;
+    private int decryptionKey1;
+    private int decryptionKey2;
+    private String text;
     private HashMap<Integer, Character> alphabet=new HashMap<>();
     private HashMap<Character, Character> shiftedWithKey1 = new HashMap<>();
     private HashMap<Character, Character> shiftedWithKey2 = new HashMap<>();
@@ -15,13 +16,34 @@ public class CaesarCipherTwo {
     public CaesarCipherTwo(int key1, int key2) {
         setKey1(key1);
         setKey2(key2);
-        setMasterKey1(0);
-        setMasterKey2(0);
+        setDecryptionKey1(26-key1);
+        setDecryptionKey2(26-key2);
         setAlphabet();
         setShiftedWithKey1();
         setShiftedWithKey2();
+        setText("");
     }
 
+    public CaesarCipherTwo(int key1, int key2, String text) {
+        setKey1(key1);
+        setKey2(key2);
+        setDecryptionKey1(26-key1);
+        setDecryptionKey2(26-key2);
+        setAlphabet();
+        setShiftedWithKey1();
+        setShiftedWithKey2();
+        setText(encrypt(text));
+    }
+
+    public CaesarCipherTwo(String text) {
+        setAlphabet();
+        decrypt(text);
+        setKey1(26-decryptionKey1);
+        setKey2(26-decryptionKey2);
+        setShiftedWithKey1();
+        setShiftedWithKey2();
+        setText(decrypt(text));
+    }
     public int getKey1() {
         return key1;
     }
@@ -38,20 +60,28 @@ public class CaesarCipherTwo {
         this.key2 = key2;
     }
 
-    public int getMasterKey1() {
-        return masterKey1;
+    public int getDecryptionKey1() {
+        return decryptionKey1;
     }
 
-    public void setMasterKey1(int masterKey1) {
-        this.masterKey1 = masterKey1;
+    public void setDecryptionKey1(int decryptionKey1) {
+        this.decryptionKey1 = decryptionKey1;
     }
 
-    public int getMasterKey2() {
-        return masterKey2;
+    public int getDecryptionKey2() {
+        return decryptionKey2;
     }
 
-    public void setMasterKey2(int masterKey2) {
-        this.masterKey2 = masterKey2;
+    public void setDecryptionKey2(int decryptionKey2) {
+        this.decryptionKey2 = decryptionKey2;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public HashMap<Integer, Character> getAlphabet() {
@@ -121,24 +151,21 @@ public class CaesarCipherTwo {
                 secondhalft.append(input.charAt(i));
             }
         }
-        CaesarCipher cc1 = new CaesarCipher(key1);
-        CaesarCipher cc2 = new CaesarCipher(key2);
-        cc1.decrypt(new String(firsthalft));
-        cc2.decrypt(new String(secondhalft));
-        String decrypted1 = cc1.decrypt(new String(firsthalft));
-        String decrypted2 = cc2.decrypt(new String(secondhalft));
-        setMasterKey1(cc1.getMasterKey());
-        setMasterKey2(cc2.getMasterKey());
+        CaesarCipher cc1 = new CaesarCipher(new String(firsthalft));
+        CaesarCipher cc2 = new CaesarCipher(new String(secondhalft));
+
+        setDecryptionKey1(cc1.getDecryptionKey());
+        setDecryptionKey2(cc2.getDecryptionKey());
         StringBuilder output = new StringBuilder();
         int index1 = 0;
         int index2 = 0;
 
         for (int i = 0; i < input.length(); i++) {
             if (i % 2 == 0) {
-                output.append(decrypted1.charAt(index1));
+                output.append(cc1.getText().charAt(index1));
                 index1++;
             } else {
-                output.append(decrypted2.charAt(index2));
+                output.append(cc2.getText().charAt(index2));
                 index2++;
             }
         }
