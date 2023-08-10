@@ -1,6 +1,7 @@
-package keiser;
+package keiser.cc;
 
 import edu.duke.FileResource;
+import keiser.cc.CaesarCipher;
 
 public class TestCaesarCipher {
 

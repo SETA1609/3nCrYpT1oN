@@ -1,4 +1,6 @@
-package keiser;
+package keiser.cc;
+
+import keiser.cc.CaesarCipher;
 
 import java.util.HashMap;
 
