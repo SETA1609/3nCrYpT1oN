@@ -47,7 +47,8 @@ public class WordFrequencies {
         return false;
 
     }
-    public String filterString(String input){
+    /*
+    * public String filterString(String input){
         String output=input;
         if (needToReduce(input)){
             if (isFirstNotLetter(input)){
@@ -64,6 +65,8 @@ public class WordFrequencies {
          }
         return output;
     }
+    * */
+
     public void findUnique(){
         myWords.clear();
         myFreqs.clear();
@@ -71,12 +74,12 @@ public class WordFrequencies {
         ArrayList<String>words= new ArrayList<>();
 
         for (String word:fr.words()) {
-            String currentWord=filterString(word.toLowerCase());
+            String currentWord=word.toLowerCase();//filterString(word.toLowerCase());
             words.add(currentWord);
         }
 
         for (String word:words) {
-            String currentWord=filterString(word.toLowerCase());
+            String currentWord=word.toLowerCase();//filterString(word.toLowerCase());
             myWords.add(currentWord);
             if (myWords.contains(currentWord)){
                 myFreqs.put(currentWord,1);
@@ -84,7 +87,7 @@ public class WordFrequencies {
         }
 
         for (String word:words) {
-            String currentWord=filterString(word.toLowerCase());
+            String currentWord=word.toLowerCase();//filterString(word.toLowerCase());
             if (myWords.contains(currentWord)) {
                 myFreqs.put(currentWord, myFreqs.get(currentWord)+1);
             }
